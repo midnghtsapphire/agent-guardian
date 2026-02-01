@@ -1,7 +1,17 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Zap, Shield, BarChart3 } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { ArrowRight, Zap, Shield, BarChart3, Menu } from "lucide-react";
+
+const navLinks = [
+  { href: "#features", label: "Features" },
+  { href: "#pricing", label: "Pricing" },
+  { href: "#about", label: "About" },
+];
 
 const Index = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
       {/* Background glow effects */}
@@ -19,14 +29,48 @@ const Index = () => {
           </div>
           
           <div className="hidden md:flex items-center gap-8">
-            <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors">Features</a>
-            <a href="#pricing" className="text-muted-foreground hover:text-foreground transition-colors">Pricing</a>
-            <a href="#about" className="text-muted-foreground hover:text-foreground transition-colors">About</a>
+            {navLinks.map((link) => (
+              <a 
+                key={link.href}
+                href={link.href} 
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {link.label}
+              </a>
+            ))}
           </div>
           
           <div className="flex items-center gap-3">
             <Button variant="ghost" className="hidden sm:inline-flex">Sign In</Button>
-            <Button className="glow-effect">Get Started</Button>
+            <Button className="glow-effect hidden sm:inline-flex">Get Started</Button>
+            
+            {/* Mobile Menu */}
+            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="md:hidden">
+                  <Menu className="h-5 w-5" />
+                  <span className="sr-only">Open menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[280px] bg-background/95 backdrop-blur-xl border-border">
+                <nav className="flex flex-col gap-6 mt-8">
+                  {navLinks.map((link) => (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-lg font-medium text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      {link.label}
+                    </a>
+                  ))}
+                  <div className="flex flex-col gap-3 pt-4 border-t border-border">
+                    <Button variant="ghost" className="justify-start">Sign In</Button>
+                    <Button className="glow-effect">Get Started</Button>
+                  </div>
+                </nav>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </nav>
